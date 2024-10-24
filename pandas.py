@@ -94,13 +94,24 @@ print(epct_change.to_markdown())
 # Total EV produced
 total_ev_produced = ev_cat_01_24_cleaned['Total_EV_Produced'].sum()
 
-# Loop through each vehicle category and calculate percentage contribution
+# Calculating percentage contribution of each category 
 for category in ev_cat_01_24_cleaned.columns[1:16]:
     category_sum = ev_cat_01_24_cleaned[category].sum()
     percentage_contribution = (category_sum / total_ev_produced) * 100
     print(category,":",category_sum,":",percentage_contribution.round(4))
-# Assuming your DataFrame is ev_cat_01_24_cleaned
-ev_cat_01_24_cleaned.to_csv('ev_data_cleaned.csv', index=False)
-from google.colab import files
-files.download('ev_data_cleaned.csv')
+
+#Total chargers across all states
+total_chargers = Operational_PC['No. of Operational PCS'].sum()
+print("Total chargers across all states:", total_chargers)
+
+#Percentage of chargers present in each state
+Operational_PC['Percentage Contribution'] = (Operational_PC['No. of Operational PCS'] / total_chargers) * 100
+print(Operational_PC[['State', 'Percentage Contribution']].round(2).sort_values(by='Percentage Contribution', ascending=False).to_string(index=False))
+
+# Calculate the percentage contribution of each class in total registration
+print(Vehicle_class['Total Registration'].sum())
+Vehicle_class["Perc contribution"]=(Vehicle_class['Total Registration']/Vehicle_class['Total Registration'].sum())*100
+print(Vehicle_class[['Vehicle Class','Perc contribution']])
+
+
 
